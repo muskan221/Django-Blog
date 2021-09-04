@@ -10,14 +10,20 @@ def post(request,slug):
 def index(request):
     post = Post.objects.all()
     print(post)
-    return HttpResponse("Done")
+    return render(request, "index.html")
 
 def create(request): 
 
     if request.method == 'POST':
         form = PostForm(request.POST)
-        post = form.save()
-        return HttpResponse(post.title)
+        if form.is_valid():
+            post = form.save()
+            return HttpResponse(post.title)
+        else:
+            context = {
+            'form' : form,
+            }
+            return render(request, "create.html", context)
 
     else:
         form = PostForm()
