@@ -24,7 +24,6 @@ def create(request):
             'form' : form,
             }
             return render(request, "create.html", context)
-
     else:
         form = PostForm()
         context = {
