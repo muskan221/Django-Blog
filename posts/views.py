@@ -1,5 +1,6 @@
 from .models import Category,Post
 from django.shortcuts import render,HttpResponse
+from .forms import PostForm
 
 # Create your views here.
 def post(request,slug):
@@ -10,3 +11,20 @@ def index(request):
     post = Post.objects.all()
     print(post)
     return HttpResponse("Done")
+
+def create(request): 
+
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        post = form.save()
+        return HttpResponse(post.title)
+
+    else:
+        form = PostForm()
+        context = {
+            'form' : form,
+        }
+        return render(request, "create.html", context)
+
+
+

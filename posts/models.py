@@ -10,15 +10,19 @@ class Category(models.Model):
     slug=models.SlugField(default='',editable=False)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
-    deleted_at=models.DateTimeField(null=True)
+    deleted_at=models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         value=slugify(self.name)
         self.slug=value
         super().save(*args, **kwargs)
 
+    def __str__(self) -> str:# categories ka naam aache sedikhna chaye
+        return self.name
+
     class Meta:
         db_table="posts_categories"
+        verbose_name_plural = "Categories"
 
 class Post(models.Model):
 
@@ -28,12 +32,15 @@ class Post(models.Model):
     slug = models.SlugField(default='', editable=False, max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateField(null=True)
+    deleted_at = models.DateField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         value = slugify(self.title)
         self.slug = value
         super().save(*args, **kwargs)
+    
+    def __str__(self) -> str:# categories ka naam aache sedikhna chaye
+        return self.title
 
     class Meta:
         db_table = "posts_posts"
