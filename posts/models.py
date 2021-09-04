@@ -6,23 +6,23 @@ from django.utils.text import slugify
 
 class Category(models.Model):
     
-    name=models.CharField(max_length=150,unique=True)
-    slug=models.SlugField(default='',editable=False)
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
-    deleted_at=models.DateTimeField(null=True, blank=True)
+    name = models.CharField(max_length=150,unique=True)
+    slug = models.SlugField(default='',editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         value=slugify(self.name)
         self.slug=value
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:# categories ka naam aache sedikhna chaye
+    def __str__(self) -> str:# To properly view the names of categories
         return self.name
 
     class Meta:
         db_table="posts_categories"
-        verbose_name_plural = "Categories"
+        verbose_name_plural = "Categories" #because in admin page spelling of categories was wrong 
 
 class Post(models.Model):
 

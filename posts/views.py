@@ -31,5 +31,28 @@ def create(request):
         }
         return render(request, "create.html", context)
 
+def createcategory(request):
+    
+    if request.method == 'POST':
+        form  = PostForm(request.POST)
+        if form.is_valid():
+            category = form.save()
+            return HttpResponse(category.name)
+        else:
+            context = {
+                'form' : form,
+            }
+            return render(request, "createcategory.html", context)
+    else:
+        form = PostForm()
+        context = {
+                'form' : form,
+            }
+        return render(request, "createcategory.html", context)
+
+
+
+
+
 
 
