@@ -1,6 +1,8 @@
 from .models import Category,Post
-from django.shortcuts import get_object_or_404, render,HttpResponse, redirect
 from .forms import CategoryForm, PostForm
+
+from django.shortcuts import get_object_or_404, render,HttpResponse, redirect
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def post(request,slug):
@@ -17,10 +19,12 @@ def index(request):
     print(post)
     return render(request, "index.html")
 
+
+@login_required
 def create(request): 
 
     if request.method == 'POST':
-        
+
         form = PostForm(request.POST)
         # form.instance.author = request.user
         if form.is_valid():
@@ -56,6 +60,8 @@ def createcategory(request):
             }
         return render(request, "createcategory.html", context)
 
+
+@login_required
 def update(request, slug):
 
     post = get_object_or_404(Post, slug=slug)
