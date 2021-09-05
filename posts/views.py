@@ -83,6 +83,15 @@ def update(request, slug):
     }
     return render(request, "create.html", context)
 
+@login_required
+def my_posts(request):
+
+    posts = Post.objects.filter(author=request.user)
+    context ={
+        'posts' : posts,
+    }
+    return render(request, "my_posts.html", context)
+
 
 
 
