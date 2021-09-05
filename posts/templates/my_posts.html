@@ -22,7 +22,7 @@
           </div>
           <div>
             <a href="{%  url 'post' post.slug %}"><h4>{{ post.title }}</h4></a>
-            <p><a href="#"><b>{{post.category}}</b></a><span class="text-muted">Date nodified</span></p>
+            <p><a href="#"><b>{{post.category}}</b></a><span class="text-muted">{{ post.updated_at }}</span></p>
             <p>{{post.content}}</p>
           </div>
         </div>
