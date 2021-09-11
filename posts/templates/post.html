@@ -18,7 +18,11 @@
             <div class ="d-flex justify-content-center">
                 <a href ="{%url 'update' post.slug %}" class="btn
                 btn-outline-info mx-1">Update</a>
-               
+                <form action ="{%url 'delete' %}"  method="POST">
+                    {% csrf_token%}
+                    <input type="hidden" name="slug" value="{{ post.slug}}">
+                    <button type ="submit" class="btn btn-outline-danger mx-1">Delete</button>
+                </form> 
             </div>
         {% endif %}
     </div>

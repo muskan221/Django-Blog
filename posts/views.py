@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from .models import Category,Post
 from .forms import CategoryForm, PostForm
-
+import datetime
 from django.shortcuts import get_object_or_404, render,HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import  BadRequest, PermissionDenied
 
 # Create your views here.
 def post(request,slug):
@@ -85,6 +85,23 @@ def update(request, slug):
         'form' : form,
     }
     return render(request, "create.html", context)
+@login_required
+def delete(request):
+    print("->", request.POST)
+    if request.method == 'POST':
+        print("->", request.POST)
+        post = get_object_or_404(Post, slug=request.POST.get("slug", None))
+        if request.user != post.author:
+            raise PermissionDenied()
+        
+        post.deleted_at = datetime.datetime.now()
+        post.save()
+        return redirect("my_posts")
+    else:
+        raise BadRequest()
+        
+        url
+     
 
 @login_required
 def my_posts(request):
