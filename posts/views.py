@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from .models import Category,Post
 from .forms import CategoryForm, PostForm
 
@@ -7,8 +8,8 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def post(request,slug):
     #post = Post.objects.filter(slug = slug).first()
-    #return HttpResponse(f"<h1> {post.title} </h1> <br> <p> {post.content}</p>")
     post  = get_object_or_404(Post, slug=slug)
+    #return HttpResponse(f"<h1> {post.title} </h1> <br> <p> {post.content}</p>")
     context = {
         'post':post,
     }
@@ -19,14 +20,12 @@ def index(request):
     print(post)
     return render(request, "index.html")
 
-
 @login_required
 def create(request): 
 
     if request.method == 'POST':
 
         form = PostForm(request.POST)
-        # form.instance.author = request.user
         if form.is_valid():
             form.instance.author = request.user
             post = form.save()

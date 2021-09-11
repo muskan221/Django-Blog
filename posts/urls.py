@@ -10,3 +10,4 @@ urlpatterns = [
     path('my_posts/', posts_views.my_posts, name="my_posts"),
     path('<str:slug>/',posts_views.post,name="post")
 ]
+
