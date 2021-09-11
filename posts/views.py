@@ -85,6 +85,8 @@ def update(request, slug):
         'form' : form,
     }
     return render(request, "create.html", context)
+
+
 @login_required
 def delete(request):
     print("->", request.POST)
