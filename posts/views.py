@@ -4,6 +4,7 @@ from .forms import CategoryForm, PostForm
 
 from django.shortcuts import get_object_or_404, render,HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 def post(request,slug):
@@ -64,6 +65,9 @@ def createcategory(request):
 def update(request, slug):
 
     post = get_object_or_404(Post, slug=slug)
+    if request.user != post.author:
+        raise PermissionDenied()
+
     
     if request.method == 'POST':    
         form = PostForm(request.POST, instance=post)
