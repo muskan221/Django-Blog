@@ -16,6 +16,14 @@ def post(request,slug):
     }
     return render(request, "post.html", context)
 
+def category(request,slug):
+    category  = get_object_or_404(Category, slug=slug)
+    context = {
+        'category':category
+    }
+    return render(request, "category.html", context)
+
+
 def index(request):
     post = Post.objects.all()
     print(post)
@@ -47,18 +55,15 @@ def createcategory(request):
         form  = CategoryForm(request.POST)
         if form.is_valid():
             category = form.save()
-            return HttpResponse(category.name)
-        else:
-            context = {
-                'form' : form,
-            }
-            return render(request, "createcategory.html", context)
+            return redirect("category", slug=category.slug)
+        
     else:
         form = CategoryForm()
-        context = {
-                'form' : form,
-            }
-        return render(request, "createcategory.html", context)
+        
+    context = {                
+        'form' : form,
+        }
+    return render(request, "createcategory.html", context)
 
 
 @login_required
@@ -101,8 +106,6 @@ def delete(request):
         return redirect("my_posts")
     else:
         raise BadRequest()
-        
-        url
      
 
 @login_required
