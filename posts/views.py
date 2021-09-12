@@ -117,6 +117,22 @@ def my_posts(request):
     }
     return render(request, "my_posts.html", context)
 
+def my_categories(request):
+
+    categories = Category.objects.all()
+    context ={
+        'categories' : categories 
+    }
+    return render(request, "my_categories.html", context)
+
+def postofcategory(request, category):
+    postofcategory = Post.objects.filter(category__name = category)
+    context ={
+         'postofcategory':postofcategory
+    }
+    return render(request, "postofcategory.html", context)
+
+
 
 
 
