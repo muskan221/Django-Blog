@@ -134,3 +134,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = 'admin:login'
 LOGIN_REDIRECT_URL = 'posts'
+
+DEFAULT_PIC = 'nopic.jpg'
