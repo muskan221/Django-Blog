@@ -3,8 +3,9 @@
 {% load crispy_forms_tags %}
 {% block 'body-content'%}
     <form  class= "container" method = 'POST' enctype="multipart/form-data"> 
-        #enctype because without this files will not be visible
+        <!-- enctype because without this files will not be visible -->
         {% csrf_token %}
+         {{form.media}} <!--to bring the css of wisfic editor -->
         {{form|crispy}}
 
         <button class="btn btn-primary" type="submit">Submit</button>

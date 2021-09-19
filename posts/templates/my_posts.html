@@ -25,10 +25,10 @@
             <p><a href="#"><b>{{post.category}}</b></a>
               <span class="text-muted">{{ post.updated_at|date:"D d M Y" }}</span></p>
             {% if post.content|wordcount > 20 %}
-              <p>{{post.content|truncatewords:50}}</p>
+              <p>{{post.content|safe|truncatewords_html:50}}</p>
               <a href="{%  url 'post' post.slug %}" class="text-muted">Read more</a>
             {% else %}
-              <p>{{ post.content|truncatewords:50 }}</p>
+              <p>{{ post.content|truncatewords_html:50 }}</p>
             {% endif %}
           </div>
         </div>

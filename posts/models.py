@@ -40,8 +40,7 @@ class Post(models.Model):
         if filename != settings.DEFAULT_PIC:
             base_filename, file_extension = os.path.splitext(filename) #to break filename into its name and extension
              #and to get file name and its extension
-            current_time_str = datetime.datetime.now().strftime
-            ('%d-%m-%Y_%I:%M:%S,%f')
+            current_time_str = datetime.datetime.now().strftime('%d-%m-%Y_%I:%M:%S,%f')
             filename = f'{base_filename}_{current_time_str}{file_extension}'
             return f'post_pics/{filename}'
 

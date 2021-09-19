@@ -1,7 +1,16 @@
 from django import forms
 from .models import Post, Category
 
+from tinymce import TinyMCE
+
 class PostForm(forms.ModelForm):
+
+    content = forms.CharField(
+        widget=TinyMCE(attrs={
+            'required': True,
+            'cols': 30,
+            'rows':10
+        }))
     
     class Meta:
         model =  Post
