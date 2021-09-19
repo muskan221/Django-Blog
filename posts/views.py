@@ -8,7 +8,7 @@ from django.core.exceptions import  BadRequest, PermissionDenied
 
 # Create your views here.
 def post(request,slug):
-    #post = Post.objects.filter(slug = slug).first()
+    #post = Post.query.filter(slug = slug).first()
     post  = get_object_or_404(Post, slug=slug)
     #return HttpResponse(f"<h1> {post.title} </h1> <br> <p> {post.content}</p>")
     context = {
@@ -25,7 +25,7 @@ def category(request,slug):
 
 
 def index(request):
-    post = Post.objects.all()
+    post = Post.query.all()
     print(post)
     return render(request, "index.html")
 
@@ -106,12 +106,46 @@ def delete(request):
         return redirect("my_posts")
     else:
         raise BadRequest()
-     
+
+@login_required
+def trash(request):
+
+    posts = Post.objects.filter(author=request.user).exclude(deleted_at=None)
+    context ={
+        'posts' : posts,
+    }
+    return render(request, "trash.html", context)
+
+@login_required
+def restore(request, slug):
+    if request.method == 'GET':
+        post = get_object_or_404(Post.objects, slug=slug)
+        if request.user != post.author:
+            raise PermissionDenied()
+
+        post.deleted_at = None
+        post.save()
+        return redirect("my_posts")
+    else:
+        raise BadRequest()
+
+@login_required
+def permanent_delete(request):
+    if request.method == 'POST':
+        post = get_object_or_404(Post.objects, slug=request.POST.get("slug", None))
+        if request.user != post.author:
+            raise PermissionDenied()
+        post.delete()
+        return redirect("my_posts")
+    else:
+        raise BadRequest()
+
+
 
 @login_required
 def my_posts(request):
 
-    posts = Post.objects.filter(author=request.user)
+    posts = Post.query.filter(author=request.user)
     context ={
         'posts' : posts,
     }

@@ -4,6 +4,7 @@ import datetime
 from PIL import Image
 
 from django.db import models
+from django.db.models import query
 from django.db.models.expressions import Value
 from django.utils.text import slugify
 from django.contrib.auth.models import User
@@ -53,7 +54,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateField(null=True, blank=True)
-    objects = PostManager()
+    objects = models.Manager()
+    query = PostManager()
 
     def save(self, *args, **kwargs):
         value = slugify(self.title)
@@ -70,4 +72,5 @@ class Post(models.Model):
         return self.title
 
     class Meta:
+        default_manager_name = "query"
         db_table = "posts_posts"

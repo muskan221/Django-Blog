@@ -16,3 +16,12 @@ def post_cover_pic_delete_on_change(sender, instance, **kwargs):
     if old_cover_pic not in (new_cover_pic, settings.DEFAULT_PIC):
         if os.path.isfile(old_cover_pic.path):
             os.remove(old_cover_pic.path)
+
+@receiver(post_delete, sender=Post)
+def post_cover_pic_delete_on_change(sender, instance, **kwargs):
+
+    cover_pic = instance.cover_pic
+    if cover_pic.__str__() not in (settings.DEFAULT_PIC):
+        if os.path.isfile(cover_pic.path):
+            os.remove(cover_pic.path)
+
