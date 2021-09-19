@@ -41,7 +41,7 @@ class Post(models.Model):
              #and to get file name and its extension
             current_time_str = datetime.datetime.now().strftime
             ('%d-%m-%Y_%I:%M:%S,%f')
-            filename = (f'{base_filename}_{current_time_str}{file_extension}')
+            filename = f'{base_filename}_{current_time_str}{file_extension}'
             return f'post_pics/{filename}'
 
     title = models.CharField(max_length=250, unique=True)
