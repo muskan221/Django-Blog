@@ -5,6 +5,7 @@ import datetime
 from django.shortcuts import get_object_or_404, render,HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import  BadRequest, PermissionDenied
+from django.core.paginator import Paginator
 
 # Create your views here.
 def post(request,slug):
@@ -153,8 +154,15 @@ def permanent_delete(request):
 def my_posts(request):
 
     posts = Post.query.filter(author=request.user)
+    paginator = Paginator(posts,4)
+    is_paginated = paginator.num_pages > 1
+    page = request.GET.get("page", 1)
+    if int(page) > paginator.num_pages:
+        page = 1
+    page_obj = paginator.page(page) 
     context ={
-        'posts' : posts,
+        'is_paginated':is_paginated,
+         'page_obj':page_obj
     }
     return render(request, "my_posts.html", context)
 
