@@ -49,12 +49,17 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     slug = models.SlugField(default='', editable=False, max_length=500)
     cover_pic = models.ImageField(default = settings.DEFAULT_PIC, upload_to = generate_cover_pic_path)
+    views = models.BigIntegerField(default=0)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateField(null=True, blank=True)
     objects = models.Manager()
     query = PostManager()
+
+    def increment_views(self):
+        self.views += 1
+        self.save()
 
     def save(self, *args, **kwargs):
         value = slugify(self.title)
@@ -68,10 +73,10 @@ class Post(models.Model):
 
         if old_cover_pic != new_cover_pic:
             cover_pic = Image.open(self.cover_pic.path) # to resize the image given by user
-        if cover_pic.height > 500 or cover_pic.width > 500:
-            output_size = (500, 500)
-            cover_pic.thumbnail(output_size)
-            cover_pic.save(self.cover_pic.path)
+            if cover_pic.height > 500 or cover_pic.width > 500:
+                output_size = (500, 500)
+                cover_pic.thumbnail(output_size)
+                cover_pic.save(self.cover_pic.path)
     
     def __str__(self) -> str:# categories ka naam aache sedikhna chaye
         return self.title

@@ -10,6 +10,8 @@ from django.core.exceptions import  BadRequest, PermissionDenied
 def post(request,slug):
     #post = Post.query.filter(slug = slug).first()
     post  = get_object_or_404(Post, slug=slug)
+    post.increment_views()
+   
     #return HttpResponse(f"<h1> {post.title} </h1> <br> <p> {post.content}</p>")
     context = {
         'post':post,
@@ -25,9 +27,14 @@ def category(request,slug):
 
 
 def index(request):
-    post = Post.query.all()
-    print(post)
-    return render(request, "index.html")
+    latest_posts = Post.query.all().order_by("-created_at")[:6]
+    trending_posts = Post.query.all().order_by("-views")[:3]
+    context = {
+        'latest_posts': latest_posts,
+        'trending_posts': trending_posts
+    }
+
+    return render(request, "index.html", context)
 
 @login_required
 def create(request): 
