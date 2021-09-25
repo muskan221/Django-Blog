@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, render,HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import  BadRequest, PermissionDenied
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 def post(request,slug):
@@ -155,8 +156,10 @@ def my_posts(request):
 
     posts = Post.query.filter(author=request.user)
     paginator = Paginator(posts,4)
+    # ek page pe 4 posts aane chaye
     is_paginated = paginator.num_pages > 1
     page = request.GET.get("page", 1)
+    # agar url me kuch nhi likha page no= toh by default page 1 dikhayega
     if int(page) > paginator.num_pages:
         page = 1
     page_obj = paginator.page(page) 
@@ -165,6 +168,24 @@ def my_posts(request):
          'page_obj':page_obj
     }
     return render(request, "my_posts.html", context)
+
+def search(request):
+
+    search = request.GET.get("search", "")
+    posts = Post.query.filter(Q(title__icontains=search) | Q(content__icontains=search))
+    paginator = Paginator(posts, 2)
+    is_paginated = paginator.num_pages > 1
+    page = request.GET.get("page", 1)
+    if int(page) > paginator.num_pages:
+        page = 1
+    page_obj = paginator.page(page)
+    context = {
+        'search':search,
+        'is_paginated': is_paginated,
+        'page_obj':page_obj,
+    }
+    return render(request, "my_posts.html", context)
+    
 
 def my_categories(request):
 

@@ -15,6 +15,7 @@ urlpatterns = [
     path('permanet_delete/', posts_views.permanent_delete, name='permanent_delete'),
     path('postofcategory/<str:category>/', posts_views.postofcategory, name="postofcategory"),
     path('category/<str:slug>',posts_views.category,name="category"),
+    path('search/', posts_views.search, name='search'),
     path('<str:slug>/',posts_views.post,name="post")
     
 ]
