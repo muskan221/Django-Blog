@@ -59,9 +59,15 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         value = slugify(self.title)
         self.slug = value
+        old_cover_pic = None
+        if self.id:
+            old_cover_pic = Post.query.get(id=self.id).cover_pic
+
+        new_cover_pic = self.cover_pic
         super().save(*args, **kwargs)
 
-        cover_pic = Image.open(self.cover_pic.path) # to resize the image given by user
+        if old_cover_pic != new_cover_pic:
+            cover_pic = Image.open(self.cover_pic.path) # to resize the image given by user
         if cover_pic.height > 500 or cover_pic.width > 500:
             output_size = (500, 500)
             cover_pic.thumbnail(output_size)
