@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import  BadRequest, PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib import messages
 
 # Create your views here.
 def post(request,slug):
@@ -48,9 +49,10 @@ def create(request):
         if form.is_valid():
             form.instance.author = request.user
             post = form.save()
+            messages.success(request, f"{post.title}  post created successfully")
             #return HttpResponse(post.title)
             return redirect("post", slug=post.slug)
-        
+        messages.error(request, f"Error while creating a post")
     else:
         form = PostForm()
         
@@ -91,9 +93,10 @@ def update(request, slug):
         if form.is_valid():
             # form.instance.author = request.user
             post = form.save()
+            messages.success(request, f"{post.title}  post updated successfully ")
             #return HttpResponse(post.title)
             return redirect("post", slug=post.slug)
-        
+        messages.error(request, f"Error while updating a post")
     else:
         form = PostForm(instance=post)
         
@@ -105,15 +108,14 @@ def update(request, slug):
 
 @login_required
 def delete(request):
-    print("->", request.POST)
     if request.method == 'POST':
-        print("->", request.POST)
         post = get_object_or_404(Post, slug=request.POST.get("slug", None))
         if request.user != post.author:
             raise PermissionDenied()
         
         post.deleted_at = datetime.datetime.now()
         post.save()
+        messages.success(request, f"{post.title}  post Moved to Thrash")
         return redirect("my_posts")
     else:
         raise BadRequest()
@@ -136,6 +138,7 @@ def restore(request, slug):
 
         post.deleted_at = None
         post.save()
+        messages.success(request, f"{post.title} Restored")
         return redirect("my_posts")
     else:
         raise BadRequest()
@@ -147,10 +150,10 @@ def permanent_delete(request):
         if request.user != post.author:
             raise PermissionDenied()
         post.delete()
+        messages.success(request, f"{post.title}  Post Deleted successfully")
         return redirect("my_posts")
     else:
         raise BadRequest()
-
 
 
 @login_required
@@ -176,6 +179,9 @@ def search(request):
 
     search = request.GET.get("search", "")
     posts = Post.query.filter(Q(title__icontains=search) | Q(content__icontains=search))
+    if not posts:
+        # posts -> collection
+        messages.info(request, f"No Posts found for search result - {search}")
     paginator = Paginator(posts, 2)
     is_paginated = paginator.num_pages > 1
     page = request.GET.get("page", 1)
