@@ -33,7 +33,8 @@ def index(request):
     trending_posts = Post.query.all().order_by("-views")[:3]
     context = {
         'latest_posts': latest_posts,
-        'trending_posts': trending_posts
+        'trending_posts': trending_posts,
+        'tab': 'dashboard',
     }
 
     return render(request, "index.html", context)
@@ -55,6 +56,7 @@ def create(request):
         
     context = {
         'form' : form,
+        'tab': 'create',
     }
     return render(request, "create.html", context)
 
@@ -165,7 +167,8 @@ def my_posts(request):
     page_obj = paginator.page(page) 
     context ={
         'is_paginated':is_paginated,
-         'page_obj':page_obj
+         'page_obj':page_obj,
+          'tab': 'my_posts',
     }
     return render(request, "my_posts.html", context)
 
