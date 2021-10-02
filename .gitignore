@@ -1,6 +1,6 @@
 # Byte-compiled / optimized / DLL files
 media_cdn/
-static-cdn/
+static_cdn/
 etc/config.json
 __pycache__/
 *.py[cod]
