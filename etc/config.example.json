@@ -1,6 +1,6 @@
 {
     "SECRET_KEY":"",
-    "DEBUG":"",
+    "DEBUG":false,
     "ALLOWED_HOSTS":["*"],
     "DB_NAME":"",
     "DB_HOST":"",
