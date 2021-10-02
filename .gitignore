@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 media_cdn/
+static-cdn/
+etc/config.json
 __pycache__/
 *.py[cod]
 *$py.class

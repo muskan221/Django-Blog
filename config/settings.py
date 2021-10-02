@@ -11,21 +11,23 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+with open(os.path.join(BASE_DIR, r'etc/config.json'), 'r') as config_file:
+    config = json.load(config_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ql!ehdlbw*_j=4=rj1()gu=4v#@ysqb#w81_@bpze0^5s)gtbd'
+SECRET_KEY = config.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config.get("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config.get("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -80,11 +82,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'project_13',
-        'HOST':'localhost',
-        'USER': 'root',
-        'PASSWORD': 'muskan&',
-        'PORT': 3306
+        'NAME': config.get("DB_NAME"),
+        'HOST':config.get("DB_HOST"),
+        'USER': config.get("DB_USER"),
+        'PASSWORD': config.get("DB_PASSWORD"),
+        'PORT': config.get("DB_PORT"),
     }
 }
 
@@ -126,8 +128,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-MEDIA_ROOT = 'media_cdn'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 MEDIA_URL = '/media/'
 
 # Default primary key field type
